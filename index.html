@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>CountDown</title>
+        <meta name="description" content="">
+
+    </head>
+    <body>
+        <span id="msg"></span>
+	
+
+	<script>
+		var projectsList = {
+			"mft2018":{
+				"start":new Date("2018-08-04 12:00"),
+				"end":new Date("2018-08-05 18:00"),
+				"url":"http://makezine.jp/event/mft2018/",
+				"name":"Maker Faire Tokyo 2018"
+			}
+		};
+		var viewText = {
+			"ja":{"before":"開始まで","after":"時間だ。","word":{
+				"100":"三桁もあるんだよ？","10":"二桁時間あるからまだ大丈夫。","0":"まだ時間はある。","in":"現場で作れば大丈夫！","end":"終わったってなんとかなる。"
+			}}
+		}
+
+		var projectId = "mft2018";
+		var langKey = "ja";
+
+	
+
+		var now = new Date();
+		if(projectsList[projectId] && projectsList[projectId].start && projectsList[projectId].end){
+
+			var diffstart = Math.floor( ( projectsList[projectId].start.getTime() - now.getTime() ) / (1000*60*60) );
+			var diffend = Math.floor( ( projectsList[projectId].end.getTime() - now.getTime() ) / (1000*60*60) );
+			var message = "--";
+
+			if( diffstart <= 0 && diffend >=0 ){
+				 message = viewText[langKey].word.in;
+			}else if( diffend < 0 ){
+				message = viewText[langKey].word.end;
+			}else{
+				var targetNum;
+				for(i in viewText[langKey].word){
+					var ckKey = Number(i);
+					if(ckKey && ( !targetNum || targetNum < i )){
+						targetNum=i;
+					}
+				}
+				message = viewText[langKey].before + diffend + viewText[langKey].after + viewText[langKey].word[targetNum];
+			}
+			if(projectsList[projectId].name){
+				message = projectsList[projectId].name + "<br/>" + message;
+			}
+	
+			document.getElementById('msg').innerHTML = message;
+		}
+		
+	</script>
+    </body>
+</html>
+
